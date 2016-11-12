@@ -1,12 +1,12 @@
-SETTINGS MANAGEMENT
-===================
+.. contents::
+.. sectnum::
 
 
 Getting started
 ----------------
 
 Setup
------
+~~~~~
 
 .. code:: bash
 
@@ -14,7 +14,7 @@ Setup
 
 
 Usage example
--------------
+~~~~~~~~~~~~~
 
 .. code:: bash
 
