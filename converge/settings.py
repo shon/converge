@@ -22,7 +22,7 @@ def import_settings(name, exit_on_err=False):
 def detect_mode():
     try:
         mode = open('.app_mode').read().strip().upper()
-        if mode not in ('PROD', 'TEST', 'DEV'):
+        if mode not in ('PROD', 'TEST', 'DEV', 'STAGING'):
             print('ERROR: unsupported mode: %s' % mode)
             sys.exit(1)
     except Exception as err:
