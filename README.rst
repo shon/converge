@@ -87,7 +87,7 @@ Overriding settings
 Defining module veriables in site_settings.py
 
 Example:
---------
+~~~~~~~
 
 **default_settings.py**
 
