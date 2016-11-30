@@ -4,6 +4,7 @@ import importlib
 
 
 ns = locals()
+get = ns.get
 
 
 def import_settings(name, exit_on_err=False):
