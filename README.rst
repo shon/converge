@@ -30,6 +30,8 @@ Python
     from converge import settings
     print(settings.SERVER_PORT)
 
+    settings.get('VAR_THAT_DOESNT_EXIST')  # returns None
+
 
 Guidelines
 -----------
