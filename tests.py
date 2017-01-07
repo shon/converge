@@ -2,6 +2,11 @@ import os
 import glob
 from converge import settings
 
+try:
+    reload  # Python 2.7
+except NameError:
+    from importlib import reload
+
 settings_dir = 'fortest'
 default_config = {'config': 'default'}
 dev_config = {'config': 'dev'}
@@ -58,7 +63,6 @@ def teardown():
     py_path = 'default_settings.py'
     pyc_path = py_path + 'c'
     for path in (py_path, pyc_path):
-        print(path)
         if os.path.exists(path):
             os.remove(path)
     if os.path.exists(settings_dir):
