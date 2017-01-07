@@ -18,7 +18,6 @@ Usage example
 
 .. code:: bash
 
-    echo 'DEV' > .app_mode
     echo 'SERVER_PORT = 8000' > default_settings.py
     echo 'SERVER_PORT = 9000' > dev_settings.py
     echo 'SERVER_PORT = 80' > prod_settings.py
@@ -71,15 +70,14 @@ Supported settings files
 Setting mode
 ------------
 
-Create a file .app_mode This file would have just one line specifying
-settings (and hence app’s) mode.
+Create a file .convergerc. This file supports a directive **APP_MODE**
 
 Valid values are
 
-- PROD
-- DEV
-- TEST 
-- STAGING
+- prod
+- dev
+- test 
+- staging
 
 Based on ``mode`` appropriate settings module would be used (if available)
 
@@ -88,7 +86,7 @@ Overriding settings
 
 Defining module veriables in site_settings.py
 
-Example:
+Example
 ~~~~~~~
 
 **default_settings.py**
@@ -117,3 +115,30 @@ Example:
 .. code:: python
 
     DB.PORT = 1111
+
+(Slightly) Advanced usage
+---------------------------
+In case if you want to keep all settings.py files in a directory. Use `SETTINGS_DIR` directive in .convergerc file.
+
+Example
+~~~~~~~
+
+
+.. code:: bash
+    
+    >> cat .convergerc
+    
+    APP_MODE = 'prod'
+    SETTINGS_DIR = 'settings/fat_server'
+
+For Contributors
+----------------
+
+Running tests
+~~~~~~~~~~~~~
+
+.. code:: bash
+
+    git clone <repo>
+    cd converge
+    nosetests -xv tests.py

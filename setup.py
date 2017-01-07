@@ -4,7 +4,7 @@ import sys
 
 setup(
     name='converge',
-    version='0.2',
+    version='0.5',
     url='http://pypi.python.org/pypi/converge/',
     classifiers=[
         'Programming Language :: Python :: 3'
