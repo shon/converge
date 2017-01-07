@@ -38,15 +38,12 @@ def parse_rc():
                     if directive == 'APP_MODE':
                         validate_mode(value)
                     rc_config[key] = value
-                else:
-                    print('WARNING: unsupported config: %s' % line)
     else:
         print('INFO: rc file not found: %s' % os.path.abspath(rc_filename))
     return rc_config
 
 
 def import_settings(name, exit_on_err=False):
-    global ns
     name += '_settings'
     settings_dir = rc_config['SETTINGS_DIR']
     if settings_dir:
