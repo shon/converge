@@ -43,9 +43,8 @@ def parse_rc():
     return rc_config
 
 
-def import_settings(name, exit_on_err=False):
+def import_settings(name, settings_dir=None, exit_on_err=False):
     name += '_settings'
-    settings_dir = rc_config['SETTINGS_DIR']
     if settings_dir:
         name = (settings_dir + '.' + name)
     try:
@@ -67,7 +66,16 @@ def validate_mode(mode):
     return mode
 
 
-parse_rc()
-import_settings('default')
-import_settings(rc_config['APP_MODE'])
-import_settings('site')
+def main():
+    parse_rc()
+    for name in ('default', rc_config['APP_MODE'], 'site'):
+        import_settings(name, rc_config['SETTINGS_DIR'])
+
+
+def reload():
+    importlib.invalidate_caches()
+    import time
+    time.sleep(1)
+    main()
+
+main()
