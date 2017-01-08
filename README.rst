@@ -131,6 +131,24 @@ Example
     APP_MODE = 'prod'
     SETTINGS_DIR = 'settings/fat_server'
 
+This is useful when you have to deply multiple instances of an app with different configs
+
+```
+`-- settings/
+       |
+       |-- server1/
+       |      |
+       |      |--default_settings.py
+       |      |--prod_settings.py
+       |
+       |-- server2/
+       |      |--default_settings.py
+       |      |--prod_settings.py
+       |
+       |
+
+```    
+
 For Contributors
 ----------------
 
