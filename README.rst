@@ -2,34 +2,93 @@
 .. sectnum::
 
 
+What is it?
+-----------
+
+If you are a Python developer who likes to keep application configuration in simple Python modules and that your app have some default settings and production/dev/test setting files, **converge** can help you merge settings and load desired application settings.
+
+
 Getting started
 ----------------
 
-Setup
-~~~~~
+Easy to use
+~~~~~~~~~~~~
+
+.. code:: bash
+
+    default_settings.py
+    -------------------
+    SERVER_PORT = 8000
+    DOMAIN = 'example.com'
+    ADMIN_EMAIL = 'admin@example.com'
+
+    dev_settings.py
+    ---------------
+    SERVER_PORT = 9000
+
+    
+.. code:: python
+
+    from converge import settings
+    print(settings.SERVER_PORT)  # 9000
+    print(settings.DOMAIN)  # example.com
+    print(settings.get('VAR_THAT_DOESNT_EXIST'))  # None
+
+
+Install
+~~~~~~~
 
 .. code:: bash
 
     pip install converge
 
+.convergerc
+------------
 
-Usage example
-~~~~~~~~~~~~~
+.convergerc file helps converge choose application mode and in turn load correct settings file. 
 
-.. code:: bash
+Supported directives
+~~~~~~~~~~~~~~~~~~~~
 
-    echo 'SERVER_PORT = 8000' > default_settings.py
-    echo 'SERVER_PORT = 9000' > dev_settings.py
-    echo 'SERVER_PORT = 80' > prod_settings.py
+**APP_MODE**
 
-Python
+Valid values are
 
-.. code:: python
+- prod
+- dev
+- test 
+- staging
 
-    from converge import settings
-    print(settings.SERVER_PORT)
+Based on ``mode`` appropriate settings module would be used (if available)
 
-    settings.get('VAR_THAT_DOESNT_EXIST')  # returns None
+**SETTINGS_DIR**
+
+If your settings files are in different directory, use SETTINGS_DIR to point converge to correct path. 
+
+.. note:: Remember to drop __init__.py in settings directory.
+
+**Example**
+
+::
+
+    .convergerc
+    -----------
+
+    APP_MODE = 'test'
+    SETTINGS_DIR = 'appsettings'
+
+Supported settings files
+-------------------------
+
+-  Defaults: default_settings.py
+
+-  Mode
+    - production: prod_settings.py
+    - development: dev_settings.py
+    - test: test_settings.py
+    - staging: staging_settings.py
+
+- Deployment specific: site_settings.py
 
 
 Guidelines
@@ -42,7 +101,7 @@ Settings files are usual Python files that can contain valid python code however
 - For values prefer basic python datatypes usch as string, integer,
   tuples
 - eg. ``SERVER_PORT = 1234``
-- Avoid logic
+- Avoid complex python operations
 - Use simple classes for config sections
     .. code:: python
 
@@ -55,31 +114,6 @@ Settings files are usual Python files that can contain valid python code however
 
         BASE_DOMAIN = 'example.com'
         API_URL = 'api.' + BASE_DOMAIN``
-
-Supported settings files
--------------------------
-
--  Defaults: default_settings.py
--  Mode
-    - Production: prod_settings.py
-    - Development: dev_settings.py
-    - Test: test_settings.py
-    - Staging: staging_settings.py
-- Deployment specific: site_settings.py
-
-Setting mode
-------------
-
-Create a file .convergerc. This file supports a directive **APP_MODE**
-
-Valid values are
-
-- prod
-- dev
-- test 
-- staging
-
-Based on ``mode`` appropriate settings module would be used (if available)
 
 Overriding settings
 -------------------
