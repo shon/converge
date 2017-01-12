@@ -4,7 +4,7 @@ import shutil
 
 from converge import settings
 
-settings_dir = 'fortest'
+settings_dir = 'fortest/server1'
 default_config = {'config': 'default'}
 dev_config = {'config': 'dev'}
 prod_config = {'config': 'prod'}
@@ -33,8 +33,9 @@ def test_rc():
     rc_lines = [('SETTINGS_DIR = "%s"\n' % settings_dir), 'APP_MODE = "dev"\n']
     open('.convergerc', 'w').writelines(rc_lines)
 
-    os.mkdir(settings_dir)
+    os.makedirs(settings_dir)
     open(os.path.join(settings_dir, '__init__.py'), 'w').close()
+    open(os.path.join(settings_dir, '../', '__init__.py'), 'w').close()
 
     config_path = os.path.join(settings_dir, 'default_settings.py')
     create_config_file(config_path, default_config)

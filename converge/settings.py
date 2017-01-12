@@ -66,7 +66,7 @@ if sys.version_info.major == 2:
     def import_settings(name, settings_dir=None, exit_on_err=False):
         name += '_settings'
         if settings_dir:
-            name = '.'.join((settings_dir, name))
+            name = settings_dir.replace(os.sep, '.') + '.' + name
         try:
             mod = importlib.import_module(name)
             ns.update(dict((name, getattr(mod, name)) for name in dir(mod) if not name.startswith('_')))
