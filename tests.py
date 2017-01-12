@@ -1,6 +1,5 @@
 import os
 import glob
-import importlib
 import shutil
 
 from converge import settings
@@ -20,11 +19,7 @@ def create_config_lines(config):
 
 
 def create_config_file(path, config):
-    f = open(path, 'w')
-    f.writelines(create_config_lines(config))
-    f.flush()
-    os.fsync(f)
-    f.close()
+    open(path, 'w').writelines(create_config_lines(config))
 
 
 def test_no_settings_dir():
@@ -36,13 +31,7 @@ def test_no_settings_dir():
 
 def test_rc():
     rc_lines = [('SETTINGS_DIR = "%s"\n' % settings_dir), 'APP_MODE = "dev"\n']
-    f = open('.convergerc', 'w')
-    f.writelines(rc_lines)
-    f.flush()
-    os.fsync(f)
-    f.close()
-    import time
-    time.sleep(1)
+    open('.convergerc', 'w').writelines(rc_lines)
 
     os.mkdir(settings_dir)
     open(os.path.join(settings_dir, '__init__.py'), 'w').close()

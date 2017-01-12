@@ -30,7 +30,7 @@ def extract_directive(line):
 def parse_rc():
     if os.path.isfile(rc_filename):
         supported_directives = tuple(rc_config.keys())
-        lines = (line.strip() for line in open(rc_filename).readlines() if line.strip())
+        lines = [line.strip() for line in open(rc_filename).readlines() if line.strip()]
         for directive in supported_directives:
             for line in lines:
                 if directive in line:
@@ -45,17 +45,37 @@ def parse_rc():
 
 def import_settings(name, settings_dir=None, exit_on_err=False):
     name += '_settings'
+    path = name + '.py'
     if settings_dir:
-        name = (settings_dir + '.' + name)
+        path = os.path.join(settings_dir, path)
+    spec = importlib.util.spec_from_file_location(name, path)
+    mod = importlib.util.module_from_spec(spec)
     try:
-        mod = importlib.import_module(name)
+        spec.loader.exec_module(mod)
         ns.update(dict((name, getattr(mod, name)) for name in dir(mod) if not name.startswith('_')))
         print('[INFO] successfully imported: %s' % name)
-    except ImportError as err:
+    except Exception as err:
         level = 'Error' if exit_on_err else 'Warning'
-        print('[%s] Could not import "%s": %s' % (level, name, err))
+        print('[%s] Could not import "%s": %s' % (level, path, err))
         if exit_on_err:
             sys.exit(1)
+
+
+if sys.version_info.major == 2:
+
+    def import_settings(name, settings_dir=None, exit_on_err=False):
+        name += '_settings'
+        if settings_dir:
+            name = '.'.join((settings_dir, name))
+        try:
+            mod = importlib.import_module(name)
+            ns.update(dict((name, getattr(mod, name)) for name in dir(mod) if not name.startswith('_')))
+            print('[INFO] successfully imported: %s' % name)
+        except Exception as err:
+            level = 'Error' if exit_on_err else 'Warning'
+            print('[%s] Could not import "%s": %s' % (level, name, err))
+            if exit_on_err:
+                sys.exit(1)
 
 
 def validate_mode(mode):
@@ -73,9 +93,6 @@ def main():
 
 
 def reload():
-    importlib.invalidate_caches()
-    import time
-    time.sleep(1)
     main()
 
 main()
