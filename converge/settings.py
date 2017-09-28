@@ -2,6 +2,8 @@
 import importlib
 import os
 import sys
+import subprocess
+import tempfile
 
 
 ns = locals()
@@ -9,7 +11,7 @@ get = ns.get
 
 rc_filename = '.convergerc'
 rc_config = {'APP_MODE': 'dev', 'SETTINGS_DIR': None}
-
+git_url = ""  #  remote_repo_name#branch_name#settings_folder
 
 def print_and_exit(msg):
     print('ERROR: ' + msg)
@@ -84,6 +86,22 @@ def validate_mode(mode):
         print_and_exit('ERROR: unsupported mode: %s not in %s' % (mode, supported_app_modes))
     print('INFO: APP will run in [%s] mode' % mode)
     return mode
+
+
+def get_git_settings():
+    remote_repo_name, branch_name, settings_folder = git_url.split('#')
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        subprocess.run(["git", "clone", "-b", branch_name,
+                        remote_repo_name, temp_dir],
+                        stdout=subprocess.PIPE)
+
+        for root, subfolders, files in os.walk(temp_dir):
+            for subfolder in subfolders:
+                if subfolder.find(settings_folder) == 0:
+                    _folder = root + '/' + subfolder
+                    subprocess.run(["cp", "-rf", _folder, "."])
+                    break
 
 
 def main():
