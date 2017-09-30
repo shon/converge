@@ -63,7 +63,16 @@ Based on ``mode`` appropriate settings module would be used (if available)
 
 **SETTINGS_DIR**
 
-If your settings files are in different directory, use SETTINGS_DIR to point converge to correct path. 
+If your settings files are in different directory, use SETTINGS_DIR to point converge to correct path.
+You can also provide url in below format to fetch settings from git.
+
+Pattern:  remote_repo_url#branch_name#settings_directory
+
+Example
+~~~~~~~
+
+``SETTINGS_DIR = https://github.com/xxxxx/xxxxx.git#xxxxx#xxxxx``
+
 
 .. note:: Remember to drop __init__.py in settings directory.
 

@@ -11,7 +11,6 @@ get = ns.get
 
 rc_filename = '.convergerc'
 rc_config = {'APP_MODE': 'dev', 'SETTINGS_DIR': None}
-git_url = ""  #  remote_repo_name#branch_name#settings_folder
 
 def print_and_exit(msg):
     print('ERROR: ' + msg)
@@ -89,7 +88,8 @@ def validate_mode(mode):
 
 
 def get_git_settings():
-    remote_repo_name, branch_name, settings_folder = git_url.split('#')
+    remote_repo_name, branch_name, settings_folder = \
+                                 rc_config['SETTINGS_DIR'].split('#')
 
     with tempfile.TemporaryDirectory() as temp_dir:
         subprocess.run(["git", "clone", "-b", branch_name,
@@ -102,10 +102,14 @@ def get_git_settings():
                     _folder = root + '/' + subfolder
                     subprocess.run(["cp", "-rf", _folder, "."])
                     break
+    return settings_folder
 
 
 def main():
     parse_rc()
+    if rc_config['SETTINGS_DIR'] and '.git' in rc_config['SETTINGS_DIR']:
+        rc_config['SETTINGS_DIR'] = get_git_settings()
+
     for name in ('default', rc_config['APP_MODE'], 'site'):
         import_settings(name, rc_config['SETTINGS_DIR'])
 
