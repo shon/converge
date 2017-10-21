@@ -9,6 +9,20 @@ default_config = {'config': 'default'}
 dev_config = {'config': 'dev'}
 prod_config = {'config': 'prod'}
 site_config = {'config': 'site'}
+repo_dir = '/tmp/settings-repo'
+git_settings_subdir = repo_dir + '/myapp1'
+
+
+def setup_module():
+    cmds = ['mkdir -p %s' % git_settings_subdir,
+            'git init %s' % repo_dir,
+            'echo "PROD = True" > %s/prod_settings.py' % git_settings_subdir,
+            'echo "PROD = False" > %s/dev_settings.py' % git_settings_subdir
+            ]
+    for cmd in cmds:
+        ret = os.system(cmd)
+        if ret != 0:
+            raise Exception('failed: %s' % cmd)
 
 
 def create_config_lines(config):
@@ -58,6 +72,17 @@ def test_rc():
     assert settings.config == 'site'
 
 
+def test_git_settings():
+    rc_lines = [('SETTINGS_DIR = "%s"\n' % settings_dir),
+                'APP_MODE = "prod"\n',
+                ('GIT_SETTINGS_REPO = "%s"\n' % repo_dir),
+                ('GIT_SETTINGS_SUBDIR = "%s"\n' % git_settings_subdir)
+                ]
+    open('.convergerc', 'w').writelines(rc_lines)
+    settings.reload()
+    assert settings.PROD == True
+
+
 def teardown_module():
     py_path = 'default_settings.py'
     pyc_path = py_path + 'c'
@@ -68,3 +93,5 @@ def teardown_module():
         shutil.rmtree(settings_dir)
     if os.path.exists('.convergerc'):
         os.remove('.convergerc')
+    if repo_dir.startswith('/tmp'):  # playing safe
+        shutil.rmtree(repo_dir)
