@@ -50,6 +50,8 @@ Install
 Supported directives
 ~~~~~~~~~~~~~~~~~~~~
 
+_All directives are optional._
+
 **APP_MODE**
 
 Valid values are
@@ -67,6 +69,42 @@ If your settings files are in different directory, use SETTINGS_DIR to point con
 
 .. note:: Remember to drop __init__.py in settings directory.
 
+
+**GIT_SETTINGS_REPO**
+
+Fetching application settings from a git repository is supported too. If such configuration is specified, git repository is cloned into `SETTINGS_DIR`.
+
+**GIT_SETTINGS_SUBDIR**
+
+In case you 
+- use same git repository to host configurations of more than one applications and
+- say settings files are in different subdirectories
+
+Example
+
+::
+
+  my-git-repo/
+    |
+    |- myapp1
+    |    |
+    |    |- default_settings.py
+    |    |- prod_settings.py
+    |
+    |
+    |- myapp2
+
+::
+
+    cat .convergerc
+
+    SETTINGS_DIR = 'appsettings'
+    GIT_SETTINGS_REPO = 'git@github.com:shon/converge-test-settings.git'
+    GIT_SETTINGS_SUBDIR = 'myapp1'
+
+In this case all \*_settings.py files in myapp1/ would be copied to appsettings.
+
+
 **Example**
 
 ::
@@ -75,7 +113,10 @@ If your settings files are in different directory, use SETTINGS_DIR to point con
     -----------
 
     APP_MODE = 'test'
-    SETTINGS_DIR = 'appsettings'
+    SETTINGS_DIR = 'settings'
+    GIT_SETTINGS_REPO = 'git@github.com:shon/converge-test-settings.git'
+    GIT_SETTINGS_SUBDIR = 'myapp1'
+
 
 Supported settings files
 -------------------------
@@ -182,15 +223,3 @@ This is useful when you have to deply multiple instances of an app with differen
          |
          |
 
-
-For Contributors
-----------------
-
-Running tests
-~~~~~~~~~~~~~
-
-.. code:: bash
-
-    git clone <repo>
-    cd converge
-    nosetests -xv tests.py
