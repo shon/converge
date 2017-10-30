@@ -17,4 +17,3 @@ setup(
     author_email='pythonic@gmail.com',
     license="http://www.opensource.org/licenses/mit-license.php",
     )
-

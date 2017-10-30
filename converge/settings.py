@@ -101,7 +101,8 @@ def clone_git_repo(git_url, settings_dir, git_subdir=None):
 
     with tempfile.TemporaryDirectory() as temp_dir:
         clone_cmd = 'git clone %s %s' % (git_url, temp_dir)
-        src_dir = os.path.join(temp_dir, git_subdir) if git_subdir else temp_dir
+        src_dir = os.path.join(temp_dir, git_subdir) if git_subdir \
+            else temp_dir
         cp_cmd = 'cp -rvf %s/*_settings.py %s' % (src_dir, settings_dir)
 
         run_command(clone_cmd)
@@ -110,7 +111,8 @@ def clone_git_repo(git_url, settings_dir, git_subdir=None):
 
 def main():
     rc_config_default = {'APP_MODE': 'dev', 'SETTINGS_DIR': None,
-                         'GIT_SETTINGS_REPO': None, 'GIT_SETTINGS_SUBDIR': None}
+                         'GIT_SETTINGS_REPO': None,
+                         'GIT_SETTINGS_SUBDIR': None}
     rc_config = parse_rc(rc_config_default)
     settings_dir = rc_config['SETTINGS_DIR']
     git_url = rc_config['GIT_SETTINGS_REPO']

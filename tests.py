@@ -80,7 +80,7 @@ def test_git_settings():
                 ]
     open('.convergerc', 'w').writelines(rc_lines)
     settings.reload()
-    assert settings.PROD == True
+    assert settings.PROD is True
 
 
 def teardown_module():
