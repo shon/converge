@@ -139,7 +139,7 @@ Settings files are usual Python files that can contain valid python code however
 
 - Use module variables for global application wide configuration
 - Use UPPERCASE while naming settings variables
-- For values prefer basic python datatypes usch as string, integer,
+- For values prefer basic python datatypes such as string, integer,
   tuples
 - eg. ``SERVER_PORT = 1234``
 - Avoid complex python operations
@@ -150,7 +150,7 @@ Settings files are usual Python files that can contain valid python code however
             HOST = 'db.example.com'
             PORT = 1234
 
--  Use simple string operations to avoid repeatation
+-  Use simple string operations to avoid repetition
     .. code:: python
 
         BASE_DOMAIN = 'example.com'
@@ -206,7 +206,7 @@ Example
     APP_MODE = 'prod'
     SETTINGS_DIR = 'settings/fat_server'
 
-This is useful when you have to deply multiple instances of an app with different configs
+This is useful when you have to deploy multiple instances of an app with different configs
 
 ::
 
