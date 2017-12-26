@@ -29,7 +29,7 @@ Easy to use
     
 .. code:: python
 
-    from converge import settings
+    import settings
     print(settings.SERVER_PORT)  # 9000
     print(settings.DOMAIN)  # example.com
     print(settings.get('VAR_THAT_DOESNT_EXIST'))  # None

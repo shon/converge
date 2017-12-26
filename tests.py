@@ -2,7 +2,7 @@ import os
 import glob
 import shutil
 
-from converge import settings
+import settings
 
 settings_dir = 'fortest/server1'
 default_config = {'config': 'default'}
@@ -70,6 +70,10 @@ def test_rc():
     create_config_file(config_path, site_config)
     settings.reload()
     assert settings.config == 'site'
+
+
+def test_backward_compatibility():
+    from converge import settings
 
 
 def test_git_settings():
