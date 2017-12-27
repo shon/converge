@@ -1,5 +1,6 @@
 # Refer settings.rst for details
 import importlib
+import importlib.util
 import os
 import sys
 import tempfile
