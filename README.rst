@@ -9,7 +9,7 @@ If you are a Python developer who likes to keep application configuration in sim
 
 .. raw:: html
 
-    <a href="https://asciinema.org/a/CFGekCiXqiNgvixx6Ofv8meNY?autoplay=1"><img src="https://asciinema.org/a/CFGekCiXqiNgvixx6Ofv8meNY.png"/></a>
+    <a href="https://asciinema.org/a/CFGekCiXqiNgvixx6Ofv8meNY?autoplay=1&speed=3"><img src="https://asciinema.org/a/CFGekCiXqiNgvixx6Ofv8meNY.png"/></a>
     
 
 Getting started
