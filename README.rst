@@ -7,6 +7,9 @@ What is it?
 
 If you are a Python developer who likes to keep application configuration in simple Python modules and that your app have some default settings and production/dev/test setting files, **converge** can help you merge settings and load desired application settings.
 
+.. raw:: html
+
+    <a href="https://asciinema.org/a/113463?autoplay=1" target="_blank"><img src="https://asciinema.org/a/113463.png"/></a
 
 Getting started
 ----------------
