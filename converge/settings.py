@@ -90,7 +90,7 @@ if sys.version_info.major == 2:
 
 
 def validate_mode(mode):
-    supported_app_modes = ('prod', 'test', 'dev', 'staging')
+    supported_app_modes = ('prod', 'test', 'dev', 'staging', 'beta')
     if mode not in supported_app_modes:
         print_and_exit('ERROR: unsupported mode: %s not in %s' %
                        (mode, supported_app_modes))

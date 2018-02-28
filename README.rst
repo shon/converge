@@ -64,6 +64,7 @@ Valid values are
 - dev
 - test 
 - staging
+- beta
 
 Based on ``mode`` appropriate settings module would be used (if available)
 
@@ -132,6 +133,7 @@ Supported settings files
     - development: dev_settings.py
     - test: test_settings.py
     - staging: staging_settings.py
+    - beta: beta_settings.py
 
 - Deployment specific: site_settings.py
 
