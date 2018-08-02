@@ -61,7 +61,8 @@ def import_settings(name, settings_dir=None, exit_on_err=False):
             sys.exit(1)
 
 
-if sys.version_info.major == 2:
+if sys.version_info.major == 2 or (
+            sys.version_info.major == 3 and sys.version_info.minor == 4):
 
     def import_settings(name, settings_dir=None, exit_on_err=False):
         name += '_settings'
