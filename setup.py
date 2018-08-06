@@ -4,7 +4,7 @@ import sys
 
 setup(
     name='converge',
-    version='0.9',
+    version='0.9.8',
     url='http://pypi.python.org/pypi/converge/',
     classifiers=[
         'Programming Language :: Python :: 3'
@@ -17,4 +17,3 @@ setup(
     author_email='pythonic@gmail.com',
     license="http://www.opensource.org/licenses/mit-license.php",
     )
-

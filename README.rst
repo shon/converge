@@ -7,6 +7,10 @@ What is it?
 
 If you are a Python developer who likes to keep application configuration in simple Python modules and that your app have some default settings and production/dev/test setting files, **converge** can help you merge settings and load desired application settings.
 
+.. raw:: html
+
+    <a href="https://asciinema.org/a/155855?autoplay=1&speed=3"><img src="https://asciinema.org/a/155855.png"/></a>
+    
 
 Getting started
 ----------------
@@ -29,7 +33,7 @@ Easy to use
     
 .. code:: python
 
-    from converge import settings
+    import settings
     print(settings.SERVER_PORT)  # 9000
     print(settings.DOMAIN)  # example.com
     print(settings.get('VAR_THAT_DOESNT_EXIST'))  # None
@@ -50,6 +54,8 @@ Install
 Supported directives
 ~~~~~~~~~~~~~~~~~~~~
 
+_All directives are optional._
+
 **APP_MODE**
 
 Valid values are
@@ -58,6 +64,7 @@ Valid values are
 - dev
 - test 
 - staging
+- beta
 
 Based on ``mode`` appropriate settings module would be used (if available)
 
@@ -67,6 +74,42 @@ If your settings files are in different directory, use SETTINGS_DIR to point con
 
 .. note:: Remember to drop __init__.py in settings directory.
 
+
+**GIT_SETTINGS_REPO**
+
+Fetching application settings from a git repository is supported too. If such configuration is specified, git repository is cloned into `SETTINGS_DIR`.
+
+**GIT_SETTINGS_SUBDIR**
+
+In case you 
+- use same git repository to host configurations of more than one applications and
+- say settings files are in different subdirectories
+
+Example
+
+::
+
+  my-git-repo/
+    |
+    |- myapp1
+    |    |
+    |    |- default_settings.py
+    |    |- prod_settings.py
+    |
+    |
+    |- myapp2
+
+::
+
+    cat .convergerc
+
+    SETTINGS_DIR = 'appsettings'
+    GIT_SETTINGS_REPO = 'git@github.com:shon/converge-test-settings.git'
+    GIT_SETTINGS_SUBDIR = 'myapp1'
+
+In this case all \*_settings.py files in myapp1/ would be copied to appsettings.
+
+
 **Example**
 
 ::
@@ -75,7 +118,10 @@ If your settings files are in different directory, use SETTINGS_DIR to point con
     -----------
 
     APP_MODE = 'test'
-    SETTINGS_DIR = 'appsettings'
+    SETTINGS_DIR = 'settings'
+    GIT_SETTINGS_REPO = 'git@github.com:shon/converge-test-settings.git'
+    GIT_SETTINGS_SUBDIR = 'myapp1'
+
 
 Supported settings files
 -------------------------
@@ -87,6 +133,7 @@ Supported settings files
     - development: dev_settings.py
     - test: test_settings.py
     - staging: staging_settings.py
+    - beta: beta_settings.py
 
 - Deployment specific: site_settings.py
 
@@ -98,7 +145,7 @@ Settings files are usual Python files that can contain valid python code however
 
 - Use module variables for global application wide configuration
 - Use UPPERCASE while naming settings variables
-- For values prefer basic python datatypes usch as string, integer,
+- For values prefer basic python datatypes such as string, integer,
   tuples
 - eg. ``SERVER_PORT = 1234``
 - Avoid complex python operations
@@ -109,7 +156,7 @@ Settings files are usual Python files that can contain valid python code however
             HOST = 'db.example.com'
             PORT = 1234
 
--  Use simple string operations to avoid repeatation
+-  Use simple string operations to avoid repetition
     .. code:: python
 
         BASE_DOMAIN = 'example.com'
@@ -165,7 +212,7 @@ Example
     APP_MODE = 'prod'
     SETTINGS_DIR = 'settings/fat_server'
 
-This is useful when you have to deply multiple instances of an app with different configs
+This is useful when you have to deploy multiple instances of an app with different configs
 
 ::
 
@@ -182,15 +229,3 @@ This is useful when you have to deply multiple instances of an app with differen
          |
          |
 
-
-For Contributors
-----------------
-
-Running tests
-~~~~~~~~~~~~~
-
-.. code:: bash
-
-    git clone <repo>
-    cd converge
-    nosetests -xv tests.py
