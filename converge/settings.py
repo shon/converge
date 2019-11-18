@@ -112,22 +112,25 @@ def clone_git_repo(git_url, settings_dir, git_subdir=None):
 
 
 def main():
-    rc_config_default = {'APP_MODE': 'dev', 'SETTINGS_DIR': None,
-                         'GIT_SETTINGS_REPO': None,
-                         'GIT_SETTINGS_SUBDIR': None}
-    rc_config = parse_rc(rc_config_default)
-    settings_dir = rc_config['SETTINGS_DIR']
-    git_url = rc_config['GIT_SETTINGS_REPO']
-    git_subdir = rc_config['GIT_SETTINGS_SUBDIR']
+    if os.environ['SETTINGS_DIR']:
+        import_settings(os.environ.get('APP_MODE') or 'default', os.environ['SETTINGS_DIR'])
+    else:
+        rc_config_default = {'APP_MODE': 'dev', 'SETTINGS_DIR': None,
+                             'GIT_SETTINGS_REPO': None,
+                             'GIT_SETTINGS_SUBDIR': None}
+        rc_config = parse_rc(rc_config_default)
+        settings_dir = rc_config['SETTINGS_DIR']
+        git_url = rc_config['GIT_SETTINGS_REPO']
+        git_subdir = rc_config['GIT_SETTINGS_SUBDIR']
 
-    if rc_config['GIT_SETTINGS_REPO']:
-        if not os.path.exists(settings_dir):
-            print('Creating directory: %s' % settings_dir)
-            os.mkdir(settings_dir)
-        clone_git_repo(git_url, settings_dir, git_subdir)
+        if rc_config['GIT_SETTINGS_REPO']:
+            if not os.path.exists(settings_dir):
+                print('Creating directory: %s' % settings_dir)
+                os.mkdir(settings_dir)
+            clone_git_repo(git_url, settings_dir, git_subdir)
 
-    for name in ('default', rc_config['APP_MODE'], 'site'):
-        import_settings(name, settings_dir)
+        for name in ('default', rc_config['APP_MODE'], 'site'):
+            import_settings(name, settings_dir)
 
 
 def reload():
