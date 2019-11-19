@@ -1,0 +1,2 @@
+- Improve documentation (Make README easier to follow)
+- Setup Travis CI

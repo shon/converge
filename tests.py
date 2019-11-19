@@ -87,6 +87,18 @@ def test_git_settings():
     assert settings.PROD is True
 
 
+def test_env_vars():
+    config = {'SETTINGS_DIR': 'settings'}
+
+    os.environ['SETTINGS_DIR'] = 'settings/site1'
+    settings.parse_osenv(config)
+    assert config['SETTINGS_DIR'] == os.environ['SETTINGS_DIR']
+
+    os.environ['SETTINGS_DIR'] = 'settings/site2'
+    settings.parse_osenv(config)
+    assert config['SETTINGS_DIR'] == os.environ['SETTINGS_DIR']
+
+
 def teardown_module():
     py_path = 'default_settings.py'
     pyc_path = py_path + 'c'

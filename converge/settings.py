@@ -52,6 +52,12 @@ def parse_rc(rc_config):
     return rc_config
 
 
+def parse_osenv(rc_config):
+    for directive in rc_config:
+        if directive in os.environ:
+            rc_config[directive] = os.environ[directive]
+
+
 def import_settings(name, settings_dir=None, exit_on_err=False):
     name += '_settings'
     path = name + '.py'
@@ -69,25 +75,6 @@ def import_settings(name, settings_dir=None, exit_on_err=False):
         print('[%s] Could not import "%s": %s' % (level, path, err))
         if exit_on_err:
             sys.exit(1)
-
-
-if sys.version_info.major == 2 or (
-            sys.version_info.major == 3 and sys.version_info.minor == 4):
-
-    def import_settings(name, settings_dir=None, exit_on_err=False):
-        name += '_settings'
-        if settings_dir:
-            name = settings_dir.replace(os.sep, '.') + '.' + name
-        try:
-            mod = importlib.import_module(name)
-            ns.update(dict((name, getattr(mod, name))
-                      for name in dir(mod) if not name.startswith('_')))
-            print('[INFO] successfully imported: %s' % name)
-        except Exception as err:
-            level = 'Error' if exit_on_err else 'Warning'
-            print('[%s] Could not import "%s": %s' % (level, name, err))
-            if exit_on_err:
-                sys.exit(1)
 
 
 def validate_mode(mode):
@@ -112,9 +99,12 @@ def clone_git_repo(git_url, settings_dir, git_subdir=None):
 
 
 def main():
-    rc_config_default = {'APP_MODE': 'dev', 'SETTINGS_DIR': None,
+    rc_config_default = {'APP_MODE': 'dev',
+                         'SETTINGS_DIR': None,
                          'GIT_SETTINGS_REPO': None,
                          'GIT_SETTINGS_SUBDIR': None}
+
+    rc_config = parse_osenv(rc_config_default)
     rc_config = parse_rc(rc_config_default)
     settings_dir = rc_config['SETTINGS_DIR']
     git_url = rc_config['GIT_SETTINGS_REPO']

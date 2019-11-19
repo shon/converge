@@ -4,11 +4,12 @@ import sys
 
 setup(
     name='converge',
-    version='0.9.8',
+    version='1.0.0',
     url='http://pypi.python.org/pypi/converge/',
     classifiers=[
         'Programming Language :: Python :: 3'
         ],
+    python_requires='=>3.5',
     include_package_data=True,
     description='Ultra simple settings management for (only) Python apps',
     long_description=open('README.rst').read(),

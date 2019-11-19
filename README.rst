@@ -201,8 +201,8 @@ Example:
 ---------------------------
 In case if you want to keep all settings.py files in a directory. Use `SETTINGS_DIR` directive in .convergerc file.
 
-Example
-~~~~~~~
+Using SETTINGS_DIR
+~~~~~~~~~~~~~~~~~~
 
 
 .. code:: bash
@@ -229,3 +229,17 @@ This is useful when you have to deploy multiple instances of an app with differe
          |
          |
 
+Using environment variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It is possible use environment variables, which is useful in cases wheere you want to start multiple instances of same app directory.
+Any of the supported directive can exported as environment variable.
+
+
+.. code:: bash
+
+   export SETTINGS_DIR='settings/site1'
+   gunicorn --workers=2 service:app
+
+   export SETTINGS_DIR='settings/site2'
+   gunicorn --workers=2 service:app
