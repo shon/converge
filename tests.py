@@ -4,7 +4,8 @@ import shutil
 
 import settings
 
-settings_dir = 'fortest/server1'
+settings_dir1 = 'fortest/server1'
+settings_dir2 = 'fortest/server2'
 default_config = {'config': 'default'}
 dev_config = {'config': 'dev'}
 prod_config = {'config': 'prod'}
@@ -44,29 +45,29 @@ def test_no_settings_dir():
 
 
 def test_rc():
-    rc_lines = [('SETTINGS_DIR = "%s"\n' % settings_dir), 'APP_MODE = "dev"\n']
+    rc_lines = [('SETTINGS_DIR = "%s"\n' % settings_dir1), 'APP_MODE = "dev"\n']
     open('.convergerc', 'w').writelines(rc_lines)
 
-    os.makedirs(settings_dir)
-    open(os.path.join(settings_dir, '__init__.py'), 'w').close()
-    open(os.path.join(settings_dir, '../', '__init__.py'), 'w').close()
+    os.makedirs(settings_dir1)
+    open(os.path.join(settings_dir1, '__init__.py'), 'w').close()
+    open(os.path.join(settings_dir1, '../', '__init__.py'), 'w').close()
 
-    config_path = os.path.join(settings_dir, 'default_settings.py')
+    config_path = os.path.join(settings_dir1, 'default_settings.py')
     create_config_file(config_path, default_config)
     settings.reload()
     assert settings.config == 'default'
 
-    config_path = os.path.join(settings_dir, 'dev_settings.py')
+    config_path = os.path.join(settings_dir1, 'dev_settings.py')
     create_config_file(config_path, dev_config)
     settings.reload()
     assert settings.config == 'dev'
 
-    config_path = os.path.join(settings_dir, 'prod_settings.py')
+    config_path = os.path.join(settings_dir1, 'prod_settings.py')
     create_config_file(config_path, prod_config)
     settings.reload()
     assert settings.config == 'dev'
 
-    config_path = os.path.join(settings_dir, 'site_settings.py')
+    config_path = os.path.join(settings_dir1, 'site_settings.py')
     create_config_file(config_path, site_config)
     settings.reload()
     assert settings.config == 'site'
@@ -77,7 +78,7 @@ def test_backward_compatibility():
 
 
 def test_git_settings():
-    rc_lines = [('SETTINGS_DIR = "%s"\n' % settings_dir),
+    rc_lines = [('SETTINGS_DIR = "%s"\n' % settings_dir1),
                 'APP_MODE = "prod"\n',
                 ('GIT_SETTINGS_REPO = "%s"\n' % repo_dir),
                 ('GIT_SETTINGS_SUBDIR = "%s"\n' % git_settings_subdir)
@@ -87,14 +88,31 @@ def test_git_settings():
     assert settings.PROD is True
 
 
+def test_os_env_var_check():
+    os.makedirs(settings_dir2)
+    open(os.path.join(settings_dir2, '__init__.py'), 'w').close()
+    open(os.path.join(settings_dir2, '../', '__init__.py'), 'w').close()  
+
+    os.environ['SETTINGS_DIR'] = settings_dir2
+    os.environ['APP_MODE'] = 'prod'
+
+    config_path = os.path.join(settings_dir2, 'prod_settings.py')
+    create_config_file(config_path, prod_config)
+
+    settings.reload()
+    assert settings.config == 'prod'
+
+
 def teardown_module():
     py_path = 'default_settings.py'
     pyc_path = py_path + 'c'
     for path in (py_path, pyc_path):
         if os.path.exists(path):
             os.remove(path)
-    if glob.glob(os.path.join(settings_dir, '__init__.py')):  # playing safe
-        shutil.rmtree(settings_dir)
+    if glob.glob(os.path.join(settings_dir1, '__init__.py')):  # playing safe
+        shutil.rmtree(settings_dir1)
+    if glob.glob(os.path.join(settings_dir2, '__init__.py')):  # playing safe
+        shutil.rmtree(settings_dir2)
     if os.path.exists('.convergerc'):
         os.remove('.convergerc')
     if repo_dir.startswith('/tmp'):  # playing safe
