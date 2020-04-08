@@ -1,8 +1,9 @@
 import os
 import glob
 import shutil
-
+from converge.settings import get_rc_config
 import settings
+
 
 settings_dir = 'fortest/server1'
 default_config = {'config': 'default'}
@@ -22,7 +23,7 @@ def setup_module():
     for cmd in cmds:
         ret = os.system(cmd)
         if ret != 0:
-            raise Exception('failed: %s' % cmd)
+            raise Exception('failed: %s' % cmd)            
 
 
 def create_config_lines(config):
@@ -34,6 +35,16 @@ def create_config_lines(config):
 
 def create_config_file(path, config):
     open(path, 'w').writelines(create_config_lines(config))
+
+
+def test_mode():  
+    with open(".convergerc", "w") as f:
+        f.write('APP_MODE = "dev"') 
+    rc = get_rc_config()
+    mode_in_file = rc['APP_MODE']
+    mode = settings.mode()
+    assert mode_in_file == mode
+    config = configparser.ConfigParser()
 
 
 def test_no_settings_dir():
@@ -75,6 +86,17 @@ def test_rc():
 def test_backward_compatibility():
     from converge import settings
 
+def test_env_vars():
+    config = {'SETTINGS_DIR': 'settings'}
+
+    os.environ['SETTINGS_DIR'] = 'settings/site1'
+    settings.parse_osenv(config)
+    assert config['SETTINGS_DIR'] == os.environ['SETTINGS_DIR']
+
+    os.environ['SETTINGS_DIR'] = 'settings/site2'
+    settings.parse_osenv(config)
+    assert config['SETTINGS_DIR'] == os.environ['SETTINGS_DIR']
+
 
 def test_git_settings():
     rc_lines = [('SETTINGS_DIR = "%s"\n' % settings_dir),
@@ -86,17 +108,6 @@ def test_git_settings():
     settings.reload()
     assert settings.PROD is True
 
-
-def test_env_vars():
-    config = {'SETTINGS_DIR': 'settings'}
-
-    os.environ['SETTINGS_DIR'] = 'settings/site1'
-    settings.parse_osenv(config)
-    assert config['SETTINGS_DIR'] == os.environ['SETTINGS_DIR']
-
-    os.environ['SETTINGS_DIR'] = 'settings/site2'
-    settings.parse_osenv(config)
-    assert config['SETTINGS_DIR'] == os.environ['SETTINGS_DIR']
 
 
 def teardown_module():
