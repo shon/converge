@@ -20,7 +20,7 @@ def print_and_exit(msg):
 def run_command(cmd, ignore_failure=False):
     ret = os.system(cmd)
     if not ignore_failure and (ret != 0):
-        print_and_exit(f"[{cmd}] exited with status {ret}")
+        print_and_exit('[%s] exited with status %s' % (cmd, ret))
 
 
 def extract_directive(line):
@@ -69,7 +69,7 @@ def import_settings(name, settings_dir=None, exit_on_err=False):
         spec.loader.exec_module(mod)
         ns.update(dict((name, getattr(mod, name))
                   for name in dir(mod) if not name.startswith('_')))
-        print(f"[INFO] successfully imported: {name}")
+        print('[INFO] successfully imported: %s' % name)
     except Exception as err:
         level = 'Error' if exit_on_err else 'Warning'
         print('[%s] Could not import "%s": %s' % (level, path, err))
@@ -82,7 +82,7 @@ def validate_mode(mode):
     if mode not in supported_app_modes:
         print_and_exit('ERROR: unsupported mode: %s not in %s' %
                        (mode, supported_app_modes))
-    print(f"INFO: APP will run in [{mode}] mode")
+    print('INFO: APP will run in [%s] mode' % mode)
     return mode
 
 
@@ -108,12 +108,13 @@ def get_rc_config():
     return rc_config
 
 
-def mode():
+def detect_mode():
     config = get_rc_config()
     mode = config['APP_MODE']
     supported_app_modes = ('prod', 'test', 'dev', 'staging', 'beta')
     if mode not in supported_app_modes:
-        print(f'ERROR: unsupported mode: {value} not in {supported_app_modes}')
+        print_and_exit('ERROR: unsupported mode: %s not in %s' %
+                       (mode, supported_app_modes))
     return mode   
 
 
@@ -125,7 +126,7 @@ def main():
 
     if rc_config['GIT_SETTINGS_REPO']:
         if not os.path.exists(settings_dir):
-            print(f'Creating directory: {settings_dir}')
+            print('Creating directory: %s' % settings_dir)
             os.mkdir(settings_dir)
         clone_git_repo(git_url, settings_dir, git_subdir)
 

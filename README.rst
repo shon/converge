@@ -42,8 +42,6 @@ Easy to use
 Install
 ~~~~~~~
 
-Create a virtual environment and then install converge.
-
 .. code:: bash
 
     pip install converge

@@ -23,7 +23,7 @@ def setup_module():
     for cmd in cmds:
         ret = os.system(cmd)
         if ret != 0:
-            raise Exception('failed: %s' % cmd)            
+            raise Exception('failed: %s' % cmd)
 
 
 def create_config_lines(config):
@@ -37,7 +37,7 @@ def create_config_file(path, config):
     open(path, 'w').writelines(create_config_lines(config))
 
 
-def test_mode():  
+def test_detect_mode():  
     with open(".convergerc", "w") as f:
         f.write('APP_MODE = "dev"') 
     rc = get_rc_config()
