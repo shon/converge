@@ -3,6 +3,7 @@ import glob
 import shutil
 from converge.settings import get_rc_config
 import settings
+import configparser
 
 
 settings_dir = 'fortest/server1'
@@ -42,7 +43,7 @@ def test_detect_mode():
         f.write('APP_MODE = "dev"') 
     rc = get_rc_config()
     mode_in_file = rc['APP_MODE']
-    mode = settings.mode()
+    mode = settings.detect_mode()
     assert mode_in_file == mode
     config = configparser.ConfigParser()
 
