@@ -10,6 +10,7 @@ ns = locals()
 get = ns.get
 
 RC_FILENAME = '.convergerc'
+APP_MODE = ""
 
 
 def print_and_exit(msg):
@@ -35,6 +36,7 @@ def extract_directive(line):
 
 
 def parse_rc(rc_config):
+    global APP_MODE
     if os.path.isfile(RC_FILENAME):
         supported_directives = tuple(rc_config.keys())
         lines = [line.strip()
@@ -46,6 +48,7 @@ def parse_rc(rc_config):
                     key, value = extract_directive(line)
                     if directive == 'APP_MODE':
                         validate_mode(value)
+                        APP_MODE = value
                     rc_config[key] = value
     else:
         print('INFO: rc file not found: %s' % os.path.abspath(RC_FILENAME))
@@ -106,16 +109,6 @@ def get_rc_config():
     rc_config = parse_osenv(rc_config_default)
     rc_config = parse_rc(rc_config_default)
     return rc_config
-
-
-def detect_mode():
-    config = get_rc_config()
-    mode = config['APP_MODE']
-    supported_app_modes = ('prod', 'test', 'dev', 'staging', 'beta')
-    if mode not in supported_app_modes:
-        print_and_exit('ERROR: unsupported mode: %s not in %s' %
-                       (mode, supported_app_modes))
-    return mode   
 
 
 def main():

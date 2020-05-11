@@ -38,16 +38,6 @@ def create_config_file(path, config):
     open(path, 'w').writelines(create_config_lines(config))
 
 
-def test_detect_mode():  
-    with open(".convergerc", "w") as f:
-        f.write('APP_MODE = "dev"') 
-    rc = get_rc_config()
-    mode_in_file = rc['APP_MODE']
-    mode = settings.detect_mode()
-    assert mode_in_file == mode
-    config = configparser.ConfigParser()
-
-
 def test_no_settings_dir():
     assert settings.get('config') is None, settings.get('config')
     create_config_file('default_settings.py', default_config)
