@@ -1,9 +1,7 @@
 import os
 import glob
 import shutil
-from converge.settings import get_rc_config
 import settings
-import configparser
 
 
 settings_dir = 'fortest/server1'
