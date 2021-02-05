@@ -46,6 +46,7 @@ def parse_rc(rc_config):
                     key, value = extract_directive(line)
                     if directive == 'APP_MODE':
                         validate_mode(value)
+                        ns['APP_MODE'] = value
                     rc_config[key] = value
     else:
         print('INFO: rc file not found: %s' % os.path.abspath(RC_FILENAME))
@@ -98,14 +99,18 @@ def clone_git_repo(git_url, settings_dir, git_subdir=None):
         run_command(cp_cmd)
 
 
-def main():
+def get_rc_config():
     rc_config_default = {'APP_MODE': 'dev',
                          'SETTINGS_DIR': None,
                          'GIT_SETTINGS_REPO': None,
                          'GIT_SETTINGS_SUBDIR': None}
-
     rc_config = parse_osenv(rc_config_default)
     rc_config = parse_rc(rc_config_default)
+    return rc_config
+
+
+def main():
+    rc_config = get_rc_config()
     settings_dir = rc_config['SETTINGS_DIR']
     git_url = rc_config['GIT_SETTINGS_REPO']
     git_subdir = rc_config['GIT_SETTINGS_SUBDIR']
