@@ -46,7 +46,6 @@ def parse_rc(rc_config):
                     key, value = extract_directive(line)
                     if directive == 'APP_MODE':
                         validate_mode(value)
-                        ns['APP_MODE'] = value
                     rc_config[key] = value
     else:
         print('INFO: rc file not found: %s' % os.path.abspath(RC_FILENAME))
@@ -121,6 +120,7 @@ def main():
             os.mkdir(settings_dir)
         clone_git_repo(git_url, settings_dir, git_subdir)
 
+    ns['APP_MODE'] = rc_config['APP_MODE']
     for name in ('default', rc_config['APP_MODE'], 'site'):
         import_settings(name, settings_dir)
 
