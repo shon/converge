@@ -1,8 +1,11 @@
-import os
 import glob
+import os
 import shutil
-import settings
+from unittest.mock import patch
 
+import pytest
+
+import settings
 
 settings_dir = 'fortest/server1'
 default_config = {'config': 'default'}
@@ -43,9 +46,8 @@ def test_no_settings_dir():
     assert settings.get('config') == 'default', settings.get('config')
 
 
+@patch.dict(os.environ, {'SETTINGS_DIR': settings_dir, 'APP_MODE': 'dev'}, clear=True)
 def test_rc():
-    rc_lines = [('SETTINGS_DIR = "%s"\n' % settings_dir), 'APP_MODE = "dev"\n']
-    open('.convergerc', 'w').writelines(rc_lines)
 
     os.makedirs(settings_dir)
     open(os.path.join(settings_dir, '__init__.py'), 'w').close()
@@ -75,6 +77,7 @@ def test_rc():
 def test_backward_compatibility():
     from converge import settings
 
+
 def test_env_vars():
     config = {'SETTINGS_DIR': 'settings'}
 
@@ -87,16 +90,16 @@ def test_env_vars():
     assert config['SETTINGS_DIR'] == os.environ['SETTINGS_DIR']
 
 
+@patch.dict(os.environ,
+        {'SETTINGS_DIR': settings_dir,
+         'APP_MODE': 'prod',
+         'GIT_SETTINGS_REPO': repo_dir,
+         'GIT_SETTINGS_SUBDIR': git_settings_subdir,
+         'PATH': os.environ['PATH']},
+         clear=True)
 def test_git_settings():
-    rc_lines = [('SETTINGS_DIR = "%s"\n' % settings_dir),
-                'APP_MODE = "prod"\n',
-                ('GIT_SETTINGS_REPO = "%s"\n' % repo_dir),
-                ('GIT_SETTINGS_SUBDIR = "%s"\n' % git_settings_subdir)
-                ]
-    open('.convergerc', 'w').writelines(rc_lines)
     settings.reload()
     assert settings.PROD is True
-
 
 
 def teardown_module():
@@ -107,7 +110,17 @@ def teardown_module():
             os.remove(path)
     if glob.glob(os.path.join(settings_dir, '__init__.py')):  # playing safe
         shutil.rmtree(settings_dir)
-    if os.path.exists('.convergerc'):
-        os.remove('.convergerc')
     if repo_dir.startswith('/tmp'):  # playing safe
         shutil.rmtree(repo_dir)
+
+
+def test_rc_file_deprecated():
+
+    convergerc = '.convergerc'
+    open(convergerc, 'w').write("")
+
+    try:
+        with pytest.raises(Exception):
+            settings.reload()
+    finally:
+        os.remove(convergerc)

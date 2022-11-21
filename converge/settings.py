@@ -23,39 +23,11 @@ def run_command(cmd, ignore_failure=False):
         print_and_exit('[%s] exited with status %s' % (cmd, ret))
 
 
-def extract_directive(line):
-    try:
-        key, value = (s.strip() for s in line.split('='))
-        value = value[1:-1]
-    except Exception as err:
-        rc_path = os.path.abspath(RC_FILENAME)
-        print('ERROR: parsing line: ' + line)
-        print_and_exit('failed to parse %s correctly: %s' % (rc_path, err))
-    return key, value
-
-
-def parse_rc(rc_config):
-    if os.path.isfile(RC_FILENAME):
-        supported_directives = tuple(rc_config.keys())
-        lines = [line.strip()
-                 for line in open(RC_FILENAME).readlines()
-                 if line.strip()]
-        for directive in supported_directives:
-            for line in lines:
-                if directive in line:
-                    key, value = extract_directive(line)
-                    if directive == 'APP_MODE':
-                        validate_mode(value)
-                    rc_config[key] = value
-    else:
-        print('INFO: rc file not found: %s' % os.path.abspath(RC_FILENAME))
-    return rc_config
-
-
 def parse_osenv(rc_config):
     for directive in rc_config:
         if directive in os.environ:
             rc_config[directive] = os.environ[directive]
+    return rc_config
 
 
 def import_settings(name, settings_dir=None, exit_on_err=False):
@@ -104,11 +76,18 @@ def get_rc_config():
                          'GIT_SETTINGS_REPO': None,
                          'GIT_SETTINGS_SUBDIR': None}
     rc_config = parse_osenv(rc_config_default)
-    rc_config = parse_rc(rc_config_default)
     return rc_config
 
 
+def fail_on_rc_file():
+    if os.path.exists(RC_FILENAME):
+        raise Exception(f"{repr(RC_FILENAME)} has been deprecated, use environment variables instead.")
+
+
 def main():
+
+    fail_on_rc_file()
+
     rc_config = get_rc_config()
     settings_dir = rc_config['SETTINGS_DIR']
     git_url = rc_config['GIT_SETTINGS_REPO']
