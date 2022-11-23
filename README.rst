@@ -5,12 +5,8 @@
 What is it?
 -----------
 
-If you are a Python developer who likes to keep application configuration in simple Python modules and that your app have some default settings and production/dev/test setting files, **converge** can help you merge settings and load desired application settings.
+If you are a Python developer who likes to keep application configuration in simple Python modules and that your app have some default settings and production/dev/test setting files, **converge** can help you merge settings and load desired application settings based on environment variables.
 
-.. raw:: html
-
-    <a href="https://asciinema.org/a/155855?autoplay=1&speed=3"><img src="https://asciinema.org/a/155855.png"/></a>
-    
 
 Getting started
 ----------------
@@ -30,7 +26,7 @@ Easy to use
     ---------------
     SERVER_PORT = 9000
 
-    
+
 .. code:: python
 
     import settings
@@ -46,13 +42,8 @@ Install
 
     pip install converge
 
-.convergerc
-------------
-
-.convergerc file helps converge choose application mode and in turn load correct settings file. 
-
-Supported directives
-~~~~~~~~~~~~~~~~~~~~
+Supported environment variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 _All directives are optional._
 
@@ -62,7 +53,7 @@ Valid values are
 
 - prod
 - dev
-- test 
+- test
 - staging
 - beta
 
@@ -101,11 +92,9 @@ Example
 
 ::
 
-    cat .convergerc
-
-    SETTINGS_DIR = 'appsettings'
-    GIT_SETTINGS_REPO = 'git@github.com:shon/converge-test-settings.git'
-    GIT_SETTINGS_SUBDIR = 'myapp1'
+    export SETTINGS_DIR='appsettings'
+    export GIT_SETTINGS_REPO='git@github.com:shon/converge-test-settings.git'
+    export GIT_SETTINGS_SUBDIR='myapp1'
 
 In this case all \*_settings.py files in myapp1/ would be copied to appsettings.
 
@@ -114,13 +103,10 @@ In this case all \*_settings.py files in myapp1/ would be copied to appsettings.
 
 ::
 
-    .convergerc
-    -----------
-
-    APP_MODE = 'test'
-    SETTINGS_DIR = 'settings'
-    GIT_SETTINGS_REPO = 'git@github.com:shon/converge-test-settings.git'
-    GIT_SETTINGS_SUBDIR = 'myapp1'
+    export APP_MODE='test'
+    export SETTINGS_DIR='settings'
+    export GIT_SETTINGS_REPO='git@github.com:shon/converge-test-settings.git'
+    export GIT_SETTINGS_SUBDIR='myapp1'
 
 
 Supported settings files
@@ -199,18 +185,16 @@ Example:
 
 (Slightly) Advanced usage
 ---------------------------
-In case if you want to keep all settings.py files in a directory. Use `SETTINGS_DIR` directive in .convergerc file.
+In case if you want to keep all settings.py files in a directory. Use `SETTINGS_DIR` environment variable.
 
 Using SETTINGS_DIR
 ~~~~~~~~~~~~~~~~~~
 
 
 .. code:: bash
-    
-    >> cat .convergerc
-    
-    APP_MODE = 'prod'
-    SETTINGS_DIR = 'settings/fat_server'
+
+    export APP_MODE='prod'
+    export SETTINGS_DIR='settings/fat_server'
 
 This is useful when you have to deploy multiple instances of an app with different configs
 
@@ -228,18 +212,3 @@ This is useful when you have to deploy multiple instances of an app with differe
          |      |--prod_settings.py
          |
          |
-
-Using environment variables
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-It is possible use environment variables, which is useful in cases wheere you want to start multiple instances of same app directory.
-Any of the supported directive can exported as environment variable.
-
-
-.. code:: bash
-
-   export SETTINGS_DIR='settings/site1'
-   gunicorn --workers=2 service:app
-
-   export SETTINGS_DIR='settings/site2'
-   gunicorn --workers=2 service:app
