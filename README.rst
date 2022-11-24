@@ -5,7 +5,7 @@
 What is it?
 -----------
 
-If you are a Python developer who likes to keep application configuration in simple Python modules and that your app have some default settings and production/dev/test setting files, **converge** can help you merge settings and load desired application settings based on environment variables.
+If you are a Python developer who likes to keep application configuration in simple Python modules and that your app have some default settings and production/dev/test setting files, **converge** can help you merge settings and start the application with desired settings based on environment variables.
 
 
 Getting started
