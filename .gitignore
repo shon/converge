@@ -44,6 +44,7 @@ nosetests.xml
 coverage.xml
 *,cover
 .hypothesis/
+fortest
 
 # Translations
 *.mo
@@ -81,6 +82,7 @@ celerybeat-schedule
 # virtualenv
 venv/
 ENV/
+.venv/
 
 # Spyder project settings
 .spyderproject
