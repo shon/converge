@@ -8,11 +8,6 @@ What is it?
 If you are a Python developer who likes to keep application configuration in simple Python modules and that your app have some default settings and production/dev/test setting files, **converge** can help you merge settings and start the application with desired settings based on environment variables.
 
 
-
-.. image:: https://asciinema.org/a/x2nqu3H43GeTCPEM1O5Cm5Ll9.png
-        :target: https://asciinema.org/a/x2nqu3H43GeTCPEM1O5Cm5Ll9?autoplay=1&speed=2
-
-
 Getting started
 ----------------
 
@@ -89,7 +84,7 @@ Example
 
   my-git-repo/
     |
-    |- myapp1/
+    |- myapp1
     |    |
     |    |- default_settings.py
     |    |- prod_settings.py

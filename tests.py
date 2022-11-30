@@ -37,7 +37,7 @@ def create_config_lines(config):
 
 
 def create_config_file(path, config):
-    open(f"{path}", "w").writelines(create_config_lines(config))
+    open(path, 'w').writelines(create_config_lines(config))
 
 
 def test_no_settings_dir():
@@ -111,6 +111,25 @@ def test_git_settings():
     assert settings.PROD is True
 
 
+def test_rc_file_deprecated():
+
+    convergerc = ".convergerc"
+    open(convergerc, "w").write("")
+
+    try:
+        with pytest.raises(Exception):
+            settings.reload()
+    finally:
+        os.remove(convergerc)
+
+def test_ensure_settings_dir():
+    shutil.rmtree(settings_dir)
+
+    with pytest.raises(Exception, match="no such directory"):
+        settings.reload()
+
+
+
 def teardown_module():
     py_path = "default_settings.py"
     pyc_path = py_path + "c"
@@ -122,14 +141,3 @@ def teardown_module():
     if repo_dir.startswith("/tmp"):  # playing safe
         shutil.rmtree(repo_dir)
 
-
-def test_rc_file_deprecated():
-
-    convergerc = ".convergerc"
-    open(convergerc, "w").write("")
-
-    try:
-        with pytest.raises(Exception):
-            settings.reload()
-    finally:
-        os.remove(convergerc)

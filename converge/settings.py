@@ -23,10 +23,16 @@ def run_command(cmd, ignore_failure=False):
         print_and_exit(f'[{cmd}] exited with status {ret}')
 
 
+def ensure_settings_dir(rc_config):
+    settings_dir = rc_config["SETTINGS_DIR"]
+    if not os.path.exists(settings_dir):
+        raise Exception(f"SETTINGS_DIR: {repr(settings_dir)}: no such directory")
+
 def parse_osenv(rc_config):
     for directive in rc_config:
         if directive in os.environ:
             rc_config[directive] = os.environ[directive]
+
     return rc_config
 
 
@@ -91,6 +97,8 @@ def main():
     settings_dir = rc_config['SETTINGS_DIR']
     git_url = rc_config['GIT_SETTINGS_REPO']
     git_subdir = rc_config['GIT_SETTINGS_SUBDIR']
+    ensure_settings_dir(rc_config)
+
 
     if rc_config['GIT_SETTINGS_REPO']:
         if not os.path.exists(settings_dir):
