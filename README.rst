@@ -21,13 +21,13 @@ Easy to use
 
 .. code:: bash
 
-    default_settings.py
+    ./settings/default_settings.py
     -------------------
     SERVER_PORT = 8000
     DOMAIN = 'example.com'
     ADMIN_EMAIL = 'admin@example.com'
 
-    dev_settings.py
+    ./settings/dev_settings.py
     ---------------
     SERVER_PORT = 9000
 
@@ -56,17 +56,19 @@ _All directives are optional._
 
 Valid values are
 
-- prod
-- dev
+- dev (default)
 - test
 - staging
 - beta
+- prod
 
 Based on ``mode`` appropriate settings module would be used (if available)
 
 **SETTINGS_DIR**
 
-If your settings files are in different directory, use SETTINGS_DIR to point converge to correct path. 
+Defaults to "settings".
+
+If your settings files are in different directory, use SETTINGS_DIR to point converge to correct path.
 
 .. note:: Remember to drop __init__.py in settings directory.
 
@@ -87,7 +89,7 @@ Example
 
   my-git-repo/
     |
-    |- myapp1
+    |- myapp1/
     |    |
     |    |- default_settings.py
     |    |- prod_settings.py

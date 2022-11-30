@@ -71,7 +71,7 @@ def clone_git_repo(git_url, settings_dir, git_subdir=None):
 
 def get_rc_config():
     rc_config_default = {'APP_MODE': 'dev',
-                         'SETTINGS_DIR': None,
+                         'SETTINGS_DIR': "settings",
                          'GIT_SETTINGS_REPO': None,
                          'GIT_SETTINGS_SUBDIR': None}
     rc_config = parse_osenv(rc_config_default)
