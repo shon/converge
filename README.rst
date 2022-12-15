@@ -8,11 +8,6 @@ What is it?
 If you are a Python developer who likes to keep application configuration in simple Python modules and that your app have some default settings and production/dev/test setting files, **converge** can help you merge settings and start the application with desired settings based on environment variables.
 
 
-
-.. image:: https://asciinema.org/a/x2nqu3H43GeTCPEM1O5Cm5Ll9.png
-        :target: https://asciinema.org/a/x2nqu3H43GeTCPEM1O5Cm5Ll9?autoplay=1&speed=2
-
-
 Getting started
 ----------------
 
@@ -21,13 +16,13 @@ Easy to use
 
 .. code:: bash
 
-    default_settings.py
+    ./settings/default_settings.py
     -------------------
     SERVER_PORT = 8000
     DOMAIN = 'example.com'
     ADMIN_EMAIL = 'admin@example.com'
 
-    dev_settings.py
+    ./settings/dev_settings.py
     ---------------
     SERVER_PORT = 9000
 
@@ -56,17 +51,19 @@ _All directives are optional._
 
 Valid values are
 
-- prod
-- dev
+- dev (default)
 - test
 - staging
 - beta
+- prod
 
 Based on ``mode`` appropriate settings module would be used (if available)
 
 **SETTINGS_DIR**
 
-If your settings files are in different directory, use SETTINGS_DIR to point converge to correct path. 
+Defaults to "settings".
+
+If your settings files are in different directory, use SETTINGS_DIR to point converge to correct path.
 
 .. note:: Remember to drop __init__.py in settings directory.
 
