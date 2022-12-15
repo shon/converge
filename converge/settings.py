@@ -79,15 +79,14 @@ def clone_git_repo(git_url, settings_dir, git_subdir=None):
         run_command(cp_cmd)
 
 
-def get_rc_config():
-    rc_config_default = {
+def get_config():
+    config_default = {
         "APP_MODE": "dev",
         "SETTINGS_DIR": "settings",
         "GIT_SETTINGS_REPO": None,
         "GIT_SETTINGS_SUBDIR": None,
     }
-    config = parse_osenv(rc_config_default)
-    return config
+    return parse_osenv(config_default)
 
 
 def fail_on_rc_file():
@@ -101,7 +100,7 @@ def main():
 
     fail_on_rc_file()
 
-    config = get_rc_config()
+    config = get_config()
     settings_dir = config["SETTINGS_DIR"]
     git_url = config["GIT_SETTINGS_REPO"]
     git_subdir = config["GIT_SETTINGS_SUBDIR"]
